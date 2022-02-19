@@ -1,11 +1,8 @@
 import javax.swing.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.awt.*;
-public class AdminLogin extends JFrame implements ActionListener{
+public class AdminLogin extends JFrame implements ActionListener,FocusListener{
 	JLabel jlb,jlb1,jlb2,jlb3;
 	JTextField jlt;
 	JPasswordField jpf;
@@ -36,6 +33,7 @@ public class AdminLogin extends JFrame implements ActionListener{
 		jlt=new JTextField();
 		jlt.setBounds(350,270,200,40);
 		add(jlt);
+		jlt.addFocusListener(this);
 		jlb3=new JLabel("PASSWORD");
 		jlb3.setBounds(70,350,700,40);
 		add(jlb3);
@@ -44,6 +42,7 @@ public class AdminLogin extends JFrame implements ActionListener{
 		jpf=new JPasswordField();
 		jpf.setBounds(350,350,200,40);
 		add(jpf);
+		jpf.addFocusListener(this);
 		bt1=new JButton("LOGIN");
 		bt1.setBounds(300,450,100,50);
 		add(bt1);
@@ -60,12 +59,11 @@ public class AdminLogin extends JFrame implements ActionListener{
 		background.setLayout(new FlowLayout());
 		
 		setVisible(true);
-		
 		setTitle("Login Page");
 	}
 
 	public static void main(String[] args) {
-//		AdminLogin obj=new AdminLogin();
+		new AdminLogin();
 		// TODO Auto-generated method stub
 	}
 
@@ -88,18 +86,40 @@ public class AdminLogin extends JFrame implements ActionListener{
 					new MainPageOne();
 				}
 				else {
-					JOptionPane.showMessageDialog(this, "Wrong User Id or Password");
+					JOptionPane.showMessageDialog(this, "Wrong Password");
 				}
 				conn.close();
 			}
 			catch(Exception ex) {
-				JOptionPane.showMessageDialog(this, "Wrong User Id or Password");
+				JOptionPane.showMessageDialog(this, "Wrong User Id");
 				System.out.println(ex);
 			}
 
 		}
 		if(e.getSource()==bt2) {
 			this.hide();
+		}
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getSource()==jlt) {
+			if(jlt.getText().equals("")) {
+				JOptionPane.showMessageDialog(this,"please Fill User Id");
+				jlt.grabFocus();
+			}
+		}
+		else if(e.getSource()==jpf) {
+			if(jpf.getText().equals("")) {
+				JOptionPane.showMessageDialog(this,"please Enter Password");
+				jpf.grabFocus();
+			}
 		}
 	}
 }

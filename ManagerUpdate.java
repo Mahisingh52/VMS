@@ -5,8 +5,9 @@ import java.sql.*;
 public class ManagerUpdate  extends JFrame  implements ActionListener,ItemListener  {
 	JLabel l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11;
 	JTextField t2,t3,t4,t5,t6,t7,t8,t9,t10;
-	JComboBox c1;
+	JComboBox c1,c2;
 	JButton b1,b2;
+	JTextArea ta1;
 	public ManagerUpdate() {
 		setLayout(null);
 		setVisible(true);
@@ -80,11 +81,18 @@ public class ManagerUpdate  extends JFrame  implements ActionListener,ItemListen
 		l8.setBounds(750, 270, 250, 30);
 		add(l8); Font lf8= new Font("Times New Roman",Font.BOLD,20);
 		l8.setFont(lf2);
-		t8=new JTextField();
-		t8.setBounds(1000,275,300,30);
-		add(t8);
+		c1=new JComboBox();
+		c1.addItem("Empty");
+		filldata2();
+		c1.setBounds(1000,275,300,30);
+		add(c1);
+		c1.addItemListener(this);
 		
-		l9=new JLabel("Manager Status:");
+		ta1=new JTextArea();
+		ta1.setBounds(750,330,500,200);
+		add(ta1);
+		
+	/*	l9=new JLabel("Manager Status:");
 		l9.setBounds(750, 340, 250, 30);
 		add(l9); Font lf9= new Font("Times New Roman",Font.BOLD,20);
 		l9.setFont(lf2);
@@ -99,13 +107,32 @@ public class ManagerUpdate  extends JFrame  implements ActionListener,ItemListen
 		t10=new JTextField();
 		t10.setBounds(1000,415,300,30);
 		add(t10);
-		 
+		*/ 
 		b1=new JButton("Update");   
 		b1.setBounds(800,600,150,60); add(b1);
 		b1.addActionListener(this);
 		b2=new JButton("Close");   
 		b2.setBounds(1000,600,150,60); add(b2);
 		b2.addActionListener(this);
+	}
+	void filldata2()
+	{
+		try {
+			
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","manager");
+			String sql="select shifttime_id from shift_time";
+			PreparedStatement st=con.prepareStatement(sql);
+			ResultSet rs=st.executeQuery();
+			while(rs.next())
+			{
+				c1.addItem(String.valueOf(rs.getString(1)));
+			}
+		}
+			catch(Exception ex)
+			{
+				System.out.println(ex);
+			}
 	}
 	void filldata() {
 		// TODO Auto-generated method stub
@@ -122,6 +149,7 @@ public class ManagerUpdate  extends JFrame  implements ActionListener,ItemListen
 			System.out.println(e);
 		}
 	}
+
 
 	public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException  {
 		// TODO Auto-generated method stub
@@ -213,6 +241,30 @@ public class ManagerUpdate  extends JFrame  implements ActionListener,ItemListen
 				t8.setText("");
 				t9.setText("");
 			}
+			if(e.getSource()==c1) {
+				String z=String.valueOf(c1.getSelectedItem());
+				try {
+					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","manager");
+					String sql="select SHIFTMaster_ID,SHIFTTFROM,SHIFTTTO from shift_time where SHIFTTIME_ID=?";
+					PreparedStatement st=conn.prepareStatement(sql);
+					st.setString(1,z);
+					ResultSet rs=st.executeQuery();
+					while(rs.next()) {
+					ta1.setText("Shift time"+"\n"+"SHIFTMASTER_ID:"+rs.getString(1)+" \t"+"SHIFT_FROM:"+rs.getString(2)+"\t"+"SHIFT_TO:"+rs.getString(3)+"\t");
+					}
+					conn.close();
+					
+					
+				}
+				catch(Exception ex) {
+					System.out.println(ex);
+				}
+				if(c1.getSelectedItem()=="Empty")
+					ta1.setText("");
+			}
+		
 		}
+		
 	}
 }

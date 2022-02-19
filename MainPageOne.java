@@ -3,9 +3,10 @@ import java.awt.*;
 import java.awt.event.*;
 public class MainPageOne extends JFrame implements ActionListener {
 	JMenuBar vms;
-	JMenu ref,ma,st,vis;
-	JMenuItem ad,adc,us,mi,mf,mu,md;
-	JMenuItem si,sf,su,sd;
+	JMenu ref,sfm,sft,ma,st,vis;
+	JMenuItem ad,as,adc,us,ms,mi,mf,mu,md;
+	JMenuItem sfmi,sfmf,sfmu,sfmd,sfts,sfti,sftf,sftu,sftd;
+	JMenuItem ss,si,sf,su,sd;
 	JMenuItem vi,vf,vu;
 	JLabel jlb,jlb1,jlb2,jlb3,jlb4,jlb5,jlb6;
 	JButton bt1;
@@ -52,22 +53,47 @@ public class MainPageOne extends JFrame implements ActionListener {
 		
 		vms=new JMenuBar();
 		ref=new JMenu("Registration");
+		sfm=new JMenu("Shift Master");
+		sft=new JMenu("Shift Time");
 		ma=new JMenu("Manager");
 		st=new JMenu("Staff");
 		vis=new JMenu("Visitor");
+		
+		sfmi=new JMenuItem("Insert");
+		sfmf=new JMenuItem("Find");
+		sfmu=new JMenuItem("Update");
+		sfmd=new JMenuItem("Delete");
+		sfm.add(sfmi);	sfm.add(sfmf);	sfm.add(sfmu);	sfm.add(sfmd);
+		sfmi.addActionListener(this);   sfmf.addActionListener(this);
+		sfmu.addActionListener(this);   sfmd.addActionListener(this);
+
+		sfts=new JMenuItem("Show All");
+		sfti=new JMenuItem("Insert");
+		sftf=new JMenuItem("Find");
+		sftu=new JMenuItem("Update");
+		sftd=new JMenuItem("Delete");
+		sft.add(sfts);	sft.add(sfti);	sft.add(sftf);	sft.add(sftu);	sft.add(sftd);
+		sfts.addActionListener(this);
+		sfti.addActionListener(this);   sftf.addActionListener(this);
+		sftu.addActionListener(this);   sftd.addActionListener(this);
+		
+		ms=new JMenuItem("Show All");
 		mi=new JMenuItem("Insert");
 		mf=new JMenuItem("Find");
 		mu=new JMenuItem("Update");
 		md=new JMenuItem("Delete");
-		ma.add(mi); ma.add(mf); ma.add(mu); ma.add(md);
+		ma.add(ms); ma.add(mi); ma.add(mf); ma.add(mu); ma.add(md);
+		ms.addActionListener(this);
 		mi.addActionListener(this); mf.addActionListener(this); 
 		mu.addActionListener(this); md.addActionListener(this);
 		
+		ss=new JMenuItem("Show All");
 		si=new JMenuItem("Insert");
 		sf=new JMenuItem("Find");
 		su=new JMenuItem("Update");
 		sd=new JMenuItem("Delete");
-		st.add(si); st.add(sf); st.add(su); st.add(sd);
+		st.add(ss); st.add(si); st.add(sf); st.add(su); st.add(sd);
+		ss.addActionListener(this);
 		si.addActionListener(this); sf.addActionListener(this); 
 		su.addActionListener(this); sd.addActionListener(this);
 		
@@ -79,14 +105,15 @@ public class MainPageOne extends JFrame implements ActionListener {
 		vi.addActionListener(this); vf.addActionListener(this); 
 		vu.addActionListener(this);
 		
+		as=new JMenuItem("Show All Admin's ");
 		ad=new JMenuItem("Admin Registration");
 		adc=new JMenuItem("Admin Change Password");
 		us=new JMenuItem("User Registration");
-		ref.add(ad);   ref.add(adc);	ref.add(us);
-		ad.addActionListener(this);
-		adc.addActionListener(this);
+		ref.add(as);	ref.add(ad);   ref.add(adc);	ref.add(us);
+		as.addActionListener(this);
+		ad.addActionListener(this);		adc.addActionListener(this);
 		
-		vms.add(ref); vms.add(ma); vms.add(st); vms.add(vis);
+		vms.add(ref); vms.add(sfm);  vms.add(sft);  vms.add(ma); vms.add(st); vms.add(vis);
 		setJMenuBar(vms);
 		
 		bt1=new JButton("Log Out");
@@ -111,10 +138,35 @@ public class MainPageOne extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		if(e.getSource()==as)
+			new AdminShow();
 		if(e.getSource()==ad)
 			new AdminRegister();
 		if(e.getSource()==adc)
 			new ChangePassword();
+
+		if(e.getSource()==sfmi)
+			new ShiftMasterInsert();
+		if(e.getSource()==sfmf)
+			new ShiftMasterFind();
+		if(e.getSource()==sfmu)
+			new ShiftMasterUpdate();
+		if(e.getSource()==sfmd)
+			new ShiftMasterDelete();
+				
+		if(e.getSource()==sfts)
+			new ShiftTimeShow();
+		if(e.getSource()==sfti)
+			new ShiftTimeInsert();
+		if(e.getSource()==sftf)
+			new ShiftTimeFind();
+		if(e.getSource()==sftu)
+			new ShiftTimeUpdate();
+		if(e.getSource()==sftd)
+			new ShiftTimeDelete();
+		
+		if(e.getSource()==ms)
+			new ManagerShow();
 		if(e.getSource()==mi)
 			new ManagerInsert();
 		if(e.getSource()==mf)
@@ -124,6 +176,8 @@ public class MainPageOne extends JFrame implements ActionListener {
 		if(e.getSource()==md)
 			new ManagerDelete();
 		
+		if(e.getSource()==ss)
+			new StaffShow();
 		if(e.getSource()==si)
 			new StaffInsert();
 		if(e.getSource()==sf)
@@ -134,7 +188,7 @@ public class MainPageOne extends JFrame implements ActionListener {
 			new StaffDelete();
 	
 		if(e.getSource()==vi)
-			new VisitorInsert();
+			new VisitorExists();
 		if(e.getSource()==vf)
 			new VisitorFind();
 		if(e.getSource()==vu)

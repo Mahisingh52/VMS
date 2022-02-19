@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,9 +6,9 @@ public class LoginPage extends JFrame implements ItemListener{
 	JComboBox cb;
 	public LoginPage(){		
 		setTitle("Login Page");
-		
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		jlb=new JLabel("VISITOR");
-		jlb.setBounds(250,50,200,40);
+		jlb.setBounds(250,50,300,40);
 		add(jlb);
 		Font Ifjlb=new Font("ALGERIAN",Font.BOLD,50);
 		jlb.setFont(Ifjlb);
@@ -66,5 +65,4 @@ public class LoginPage extends JFrame implements ItemListener{
 			}
 		}
 	}
-
 }

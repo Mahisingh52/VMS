@@ -5,8 +5,9 @@ import java.sql.*;
 public class StaffUpdate extends JFrame  implements ActionListener,ItemListener {
 	JButton b1,b2;
 	JLabel l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11,l12,l13; 
-	JTextField t2,t3,t4,t5,t6,t8,t9,t7,t10,t11,t12;
-	JComboBox t1;
+	JTextField t2,t3,t4,t5,t6,t8,t9,t7;
+	JComboBox t1,c1;
+	JTextArea ta1;
 	public StaffUpdate() {
 		setLayout(null);
 		setVisible(true);
@@ -93,29 +94,23 @@ public class StaffUpdate extends JFrame  implements ActionListener,ItemListener 
 		t9.setBounds(1000,200,300,30);
 		add(t9);
 		
+
 		l10=new JLabel("Shift-Time ID");
 		l10.setBounds(750, 270, 250, 30);
-		add(l10); Font lf10= new Font("Times New Roman",Font.BOLD,20);
+		getContentPane().add(l10); Font lf10= new Font("Times New Roman",Font.BOLD,20);
 		l10.setFont(lf10);
-		t10=new JTextField();
-		t10.setBounds(1000,270,300,30);
-		add(t10);
+		c1=new JComboBox();
+		c1.addItem("Empty");
+		filldata2();
+		c1.setBounds(1000,270,300,30);
+		getContentPane().add(c1);
+		c1.addItemListener(this);
 		
-		l11=new JLabel("Status");
-		l11.setBounds(750,340,300,30); add(l11);
-		Font lf11= new Font("Times New Roman",Font.BOLD,20);
-		l11.setFont(lf11);
-		t11=new JTextField();
-		t11.setBounds(1000,340,300,30);
-		add(t11);
+		ta1 = new JTextArea();
+		ta1.setBounds(755, 329, 545, 141);
+		getContentPane().add(ta1);
+	    ta1.setEditable(false);
 		
-		l12=new JLabel("Active");
-		l12.setBounds(750,410,300,30); add(l12);
-		Font lf12= new Font("Times New Roman",Font.BOLD,20);
-		l12.setFont(lf12);
-		t12=new JTextField();
-		t12.setBounds(1000,410,300,30);
-		add(t12);
 		 
 		
 		 b1=new JButton("Update");   
@@ -141,7 +136,22 @@ public class StaffUpdate extends JFrame  implements ActionListener,ItemListener 
 			System.out.println(e);
 		}
 	}
-
+	void filldata2()
+	{
+		// TODO Auto-generated method stub
+	try {
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","manager");
+		String sql="select SHIFTTIME_ID from shift_time";
+		PreparedStatement st=con.prepareStatement(sql);
+		ResultSet rs=st.executeQuery();
+		while(rs.next()) {
+			c1.addItem(rs.getString(1));
+		}
+		}catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
      new StaffUpdate();
@@ -160,14 +170,14 @@ public class StaffUpdate extends JFrame  implements ActionListener,ItemListener 
 			String g=t7.getText();//id_type
 			String h=t8.getText();//id_detail
 			String i=t9.getText();//manager_id
-			String j=t10.getText();//shift_time_id
-			int k=Integer.parseInt(t11.getText());//status
+			String j=String.valueOf(c1.getSelectedItem());//shift_time_id
+		
 				try {
 					Class.forName("oracle.jdbc.driver.OracleDriver");
 					Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","manager");
 					String sql="update staff set SFNAME=?,MANAGER_ID=?,SHIFTTIME_ID=?,SFEMAIL=?,SFPHONE=?,SFADDRESS=?,SFDOJ=?,SFID_TYPE=?,SFID_DETAIL=?,STATUS=? where STAFF_ID=?";
 					PreparedStatement st=conn.prepareStatement(sql);
-					st.setString(11,a);
+					st.setString(10,a);
 					st.setString(1,b);
 					st.setString(4,c);
 					st.setString(5,d);
@@ -177,7 +187,7 @@ public class StaffUpdate extends JFrame  implements ActionListener,ItemListener 
 					st.setString(9,h);
 					st.setString(2,i);
 					st.setString(3,j);
-					st.setInt(10,k);
+					
 					int x=st.executeUpdate();
 					JOptionPane.showMessageDialog(this,"Record Updated");
 					conn.close();
@@ -190,9 +200,8 @@ public class StaffUpdate extends JFrame  implements ActionListener,ItemListener 
 					t7.setText("");
 					t8.setText("");
 					t9.setText("");
-					t10.setText("");
-					t11.setText("");
-					t12.setText("");
+					ta1.setText("");
+					
 				}
 				catch(Exception ex) {
 					System.out.println(ex);
@@ -226,12 +235,11 @@ public class StaffUpdate extends JFrame  implements ActionListener,ItemListener 
 				t7.setText(rs.getString(9));
 				t8.setText(rs.getString(10));
 				t9.setText(rs.getString(3));
-				t10.setText(rs.getString(4));
-				t11.setText(String.valueOf(rs.getInt(11)));
 				conn.close();
 			}catch(Exception ex) {
 				System.out.println(ex);
 				}
+		}
 			if(t1.getSelectedItem()=="Empty") {
 				t2.setText("");
 				t3.setText("");
@@ -241,9 +249,31 @@ public class StaffUpdate extends JFrame  implements ActionListener,ItemListener 
 				t7.setText("");
 				t8.setText("");
 				t9.setText("");
-				t10.setText("");
-				t11.setText("");
 			}
-		}
+		if(e.getSource()==c1) {
+			String a=String.valueOf(c1.getSelectedItem());
+			try {
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection conn=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","system","manager");
+				String sql="select SHIFTMaster_ID ,SHIFTTFROM ,SHIFTTTO  from shift_time where SHIFTTIME_ID =?";
+				PreparedStatement st=conn.prepareStatement(sql);
+				st.setString(1,a);
+				
+				ResultSet rs=st.executeQuery();
+				 while (rs.next()) {
+					 
+					 ta1.setText("Shift_id:-"+rs.getString(1)+"\n"+"ShifttFrom:-"+rs.getString(2)+"\n"+"Shifttto:-"+rs.getString(3));
+				 }
+				
+				conn.close();
+			}
+			catch(Exception ex) {
+				System.out.println(ex);
+				
+			}
 	}
+			if(c1.getSelectedItem()=="Empty")
+			{	ta1.setText("");
+	}
+}
 }

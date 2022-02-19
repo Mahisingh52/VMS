@@ -89,7 +89,7 @@ public class ManagerFind  extends JFrame  implements ActionListener  {
 		add(t8);
 		t8.setEditable(false);
 
-		l9=new JLabel("Manager Status:");
+/*		l9=new JLabel("Manager Status:");
 		l9.setBounds(750, 340, 250, 30);
 		add(l9); Font lf9= new Font("Times New Roman",Font.BOLD,20);
 		l9.setFont(lf2);
@@ -106,7 +106,7 @@ public class ManagerFind  extends JFrame  implements ActionListener  {
 		t10.setBounds(1000,415,300,30);
 		add(t10);
 		t10.setEditable(false);
- 
+ */
 		b1=new JButton("Find");   
 		b1.setBounds(800,600,150,60); add(b1);
 		b1.addActionListener(this);
@@ -155,7 +155,7 @@ public class ManagerFind  extends JFrame  implements ActionListener  {
 					t6.setText(rs.getString(5));
 					t7.setText(rs.getString(6));
 					t8.setText(rs.getString(8));
-					t9.setText(String.valueOf(rs.getInt(9)));
+	//				t9.setText(String.valueOf(rs.getInt(9)));
 					conn.close();
 					
 				}
